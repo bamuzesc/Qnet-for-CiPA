@@ -377,8 +377,8 @@ double nai0,nass0,ki0,kss0,cai0,cass0,cansr0,cajsr0,m0,hf0,hs0,jO,hsp0,jp0,mL0,h
 
 //pharmacodynamic data
 int nCmax;
-string cpd;
-string IKrmode;
+const string cpd="chloroquine";
+int IKrmode;
 double Cmax;
 double IKrIC50;
 double IKrnHill;
@@ -399,8 +399,6 @@ double actshift;
 
 int main()
 {
-string cpd;
-cpd="chloroquine";
 if (cpd=="CTRL")
 	{Cmax=0;IKrIC50=1;IKrnHill=1;INaLIC50=1;INaLnHill=1;ICaLIC50=1;ICaLnHill=1;INaIC50=1;INanHill=1;ItoIC50=1;ItonHill=1;IK1IC50=1;IK1nHill=1;IKsIC50=1;IKsnHill=1;IKrKf=0;IKrKu=0;IKrhalfmax=100000000;IKrnH=1;IKrVhalf=0;actshift=0;}
 //CiPA training set
@@ -483,12 +481,12 @@ if (cpd=="vandetanib")
 
 //new
 if (cpd=="chloroquine")
-	{Cmax=410;IKrIC50=1820;IKrnHill=1.36;INaLIC50=30400;INaLnHill=0.85;ICaLIC50=30700;ICaLnHill=1;INaIC50=159000;INanHill=0.98;ItoIC50=4600000;ItonHill=1;IK1IC50=5860;IK1nHill=1;IKsIC50=100000000;IKsnHill=1;IKrKf=1;IKrKu=1;IKrhalfmax=1;IKrnH=1;IKrVhalf=0; IKrkb=0.000366; IKrkub=0.000108;actshift=0.0052;}
+	{Cmax=410;IKrIC50=1820;IKrnHill=1.36;INaLIC50=30400;INaLnHill=0.85;ICaLIC50=30700;ICaLnHill=1;INaIC50=159000;INanHill=0.98;ItoIC50=4600000;ItonHill=1;IK1IC50=5860;IK1nHill=1;IKsIC50=100000000;IKsnHill=1;IKrKf=1;IKrKu=1;IKrhalfmax=1;IKrnH=1;IKrVhalf=0;IKrkb=0.000366;IKrkub=0.000108;actshift=0.0052;}
 if (cpd=="hydroxychloroquine")
-	{Cmax=495;IKrIC50=3420;IKrnHill=1.02;INaLIC50=64900;INaLnHill=0.89;ICaLIC50=90000;ICaLnHill=1;INaIC50=96200;INanHill=0.81;ItoIC50=4600000;ItonHill=1;IK1IC50=29280;IK1nHill=1;IKsIC50=100000000;IKsnHill=1;IKrKf=1;IKrKu=1;IKrhalfmax=1;IKrnH=1;IKrVhalf=0; IKrkb=0.000213; IKrkub=0.000566;actshift=0.001;}
+	{Cmax=495;IKrIC50=3420;IKrnHill=1.02;INaLIC50=64900;INaLnHill=0.89;ICaLIC50=90000;ICaLnHill=1;INaIC50=96200;INanHill=0.81;ItoIC50=4600000;ItonHill=1;IK1IC50=29280;IK1nHill=1;IKsIC50=100000000;IKsnHill=1;IKrKf=1;IKrKu=1;IKrhalfmax=1;IKrnH=1;IKrVhalf=0;IKrkb=0.000213;IKrkub=0.000566;actshift=0.001;}
 //switch to include effects of chloroquine/hydroxychloroquine on hERG voltage-dependent activation
-string IKrmode; //possible values: "vshift", "novshift"
-IKrmode="vshift";
+IKrmode=1; //possible values: 1 = vshift, 0 = novshift
+
 
 //establish the output file "output.txt"
 FILE*output;
@@ -1158,10 +1156,9 @@ void comp_statesIKr()
 {
 IKrKf2=IKrKf;
 
-if ((cpd=="chloroquine" || cpd=="hydroxychloroquine") && IKrmode=="novshift")
-	{
-	    actshift=0;
-	}
+if ((cpd=="chloroquine" || cpd=="hydroxychloroquine") && IKrmode==0)
+	actshift=0;
+
 ReactionFlux1=IKrA11*exp(IKrB11*(v+actshift*Cmax*nCmax))*IKrIC1*pow(IKrq11,(T-293)/10)-IKrA21*exp(IKrB21*(v+actshift*Cmax*nCmax))*IKrIC2*pow(IKrq21,(T-293)/10);
 //ReactionFlux1=IKrA11*exp(IKrB11*v)*IKrIC1*pow(IKrq11,(T-293)/10)-IKrA21*exp(IKrB21*v)*IKrIC2*pow(IKrq21,(T-293)/10);
 ReactionFlux2=IKrA1*exp(IKrB1*(v+actshift*Cmax*nCmax))*IKrC1*pow(IKrq1,(T-293)/10)-IKrA2*exp(IKrB2*(v+actshift*Cmax*nCmax))*IKrC2*pow(IKrq2,(T-293)/10);
@@ -1177,7 +1174,7 @@ if (cpd=="chloroquine" || cpd=="hydroxychloroquine")
 	{
 	    ReactionFlux8=IKrkb*Cmax*nCmax*IKrIO-IKrkub*IKrCbound*IKrA53*exp(IKrB53*v)*pow(IKrq53,(T-293)/10)/(IKrA63*exp(IKrB63*v)*pow(IKrq63,(T-293)/10));
 		ReactionFlux9=IKrkb*Cmax*nCmax*IKrO-IKrkub*IKrCbound;
-	}
+    }
 else
 	{
 		ReactionFlux8=IKrKf2*IKrKt2*IKrIO*pow(nCmax*Cmax,IKrnH)/(pow(nCmax*Cmax,IKrnH)+IKrhalfmax)-IKrKt2*IKrCbound/(1+exp(-(v-IKrVhalf)/6.789))*IKrA53*exp(IKrB53*v)*pow(IKrq53,(T-293)/10)/(IKrA63*exp(IKrB63*v)*pow(IKrq63,(T-293)/10));
