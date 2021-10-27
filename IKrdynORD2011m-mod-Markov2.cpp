@@ -79,7 +79,7 @@ void dVdt_APD_CaD();//calculate voltage derivative and APD90
 void FBC();//calculate fluxes, buffers, and concentrations
 
 const double CL=2000;//pacing cycle length - orig CL=1000
-const int beats=40;// Number of Beats
+const int beats=1000;// Number of Beats
 const double ft=beats*CL;//orig 3*CL final time - orig ft=1000*CL
 const int skip=200;//orig skip=20 number of timesetps to skip in sampling of data in output file - orig skip=10
 const double safetime=25.0;//time from the beginning of each beat during which dt is fixed to small values - orig safetime=25.0
@@ -481,9 +481,9 @@ if (cpd=="vandetanib")
 
 //new
 if (cpd=="chloroquine")
-	{Cmax=410;IKrIC50=1820;IKrnHill=1.36;INaLIC50=30400;INaLnHill=0.85;ICaLIC50=30700;ICaLnHill=1;INaIC50=159000;INanHill=0.98;ItoIC50=4600000;ItonHill=1;IK1IC50=5860;IK1nHill=1;IKsIC50=100000000;IKsnHill=1;IKrKf=1;IKrKu=1;IKrhalfmax=1;IKrnH=1;IKrVhalf=0;IKrkb=0.000366;IKrkub=0.000108;actshift=0.0052;}
+	{Cmax=410;IKrIC50=1820;IKrnHill=1.36;INaLIC50=30400;INaLnHill=0.85;ICaLIC50=30700;ICaLnHill=1;INaIC50=159000;INanHill=0.98;ItoIC50=4600000;ItonHill=1;IK1IC50=5860;IK1nHill=1;IKsIC50=100000000;IKsnHill=1;IKrKf=1;IKrKu=1;IKrhalfmax=1;IKrnH=1;IKrVhalf=0;IKrkb=0.000000366;IKrkub=0.000108;actshift=0.0052;}
 if (cpd=="hydroxychloroquine")
-	{Cmax=495;IKrIC50=3420;IKrnHill=1.02;INaLIC50=64900;INaLnHill=0.89;ICaLIC50=90000;ICaLnHill=1;INaIC50=96200;INanHill=0.81;ItoIC50=4600000;ItonHill=1;IK1IC50=29280;IK1nHill=1;IKsIC50=100000000;IKsnHill=1;IKrKf=1;IKrKu=1;IKrhalfmax=1;IKrnH=1;IKrVhalf=0;IKrkb=0.000213;IKrkub=0.000566;actshift=0.001;}
+	{Cmax=495;IKrIC50=3420;IKrnHill=1.02;INaLIC50=64900;INaLnHill=0.89;ICaLIC50=90000;ICaLnHill=1;INaIC50=96200;INanHill=0.81;ItoIC50=4600000;ItonHill=1;IK1IC50=29280;IK1nHill=1;IKsIC50=100000000;IKsnHill=1;IKrKf=1;IKrKu=1;IKrhalfmax=1;IKrnH=1;IKrVhalf=0;IKrkb=0.000000213;IKrkub=0.000566;actshift=0.001;}
 //switch to include effects of chloroquine/hydroxychloroquine on hERG voltage-dependent activation
 IKrmode=1; //possible values: 1 = vshift, 0 = novshift
 
